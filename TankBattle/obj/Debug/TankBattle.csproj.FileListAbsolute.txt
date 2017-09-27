@@ -1,0 +1,15 @@
+E:\CAB201\CAB201Assignment\TankBattle\bin\Debug\Images\background1.jpg
+E:\CAB201\CAB201Assignment\TankBattle\bin\Debug\Images\background2.jpg
+E:\CAB201\CAB201Assignment\TankBattle\bin\Debug\Images\background3.jpg
+E:\CAB201\CAB201Assignment\TankBattle\bin\Debug\Images\background4.jpg
+E:\CAB201\CAB201Assignment\TankBattle\bin\Debug\LICENSE.txt
+E:\CAB201\CAB201Assignment\TankBattle\bin\Debug\TankBattle.exe.config
+E:\CAB201\CAB201Assignment\TankBattle\bin\Debug\TankBattle.exe
+E:\CAB201\CAB201Assignment\TankBattle\bin\Debug\TankBattle.pdb
+E:\CAB201\CAB201Assignment\TankBattle\obj\Debug\TankBattle.SkirmishForm.resources
+E:\CAB201\CAB201Assignment\TankBattle\obj\Debug\TankBattle.Properties.Resources.resources
+E:\CAB201\CAB201Assignment\TankBattle\obj\Debug\TankBattle.IntroForm.resources
+E:\CAB201\CAB201Assignment\TankBattle\obj\Debug\TankBattle.csproj.GenerateResource.Cache
+E:\CAB201\CAB201Assignment\TankBattle\obj\Debug\TankBattle.exe
+E:\CAB201\CAB201Assignment\TankBattle\obj\Debug\TankBattle.pdb
+E:\CAB201\CAB201Assignment\TankBattle\obj\Debug\TankBattle.csprojResolveAssemblyReference.cache
