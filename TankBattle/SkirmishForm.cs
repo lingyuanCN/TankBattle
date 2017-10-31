@@ -11,6 +11,9 @@ using System.Windows.Forms;
 
 namespace TankBattle
 {
+    /// <summary>
+    /// This form is where most of the actual gameplay happens. 
+    /// </summary>
     public partial class SkirmishForm : Form
     {
         private Color landscapeColour;
@@ -19,10 +22,15 @@ namespace TankBattle
         private int levelWidth = 160;
         private int levelHeight = 120;
         private Game currentGame;
+        private static Random randomNumber = new Random();
 
         private BufferedGraphics backgroundGraphics;
         private BufferedGraphics gameplayGraphics;
 
+        /// <summary>
+        /// The constructor for SkirmishForm
+        /// </summary>
+        /// <param name="game"></param>
         public SkirmishForm(Game game)
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -31,7 +39,30 @@ namespace TankBattle
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.UserPaint, true);
 
+            currentGame = game;
+            string[] imageFilenames = {
+                "Images\\background1.jpg",
+                "Images\\background2.jpg",
+                "Images\\background3.jpg",
+                "Images\\background4.jpg"
+            };
+            Color[] landscapeColours = {
+                Color.FromArgb(255, 0, 0, 0),
+                Color.FromArgb(255, 73, 58, 47),
+                Color.FromArgb(255, 148, 116, 93),
+                Color.FromArgb(255, 133, 119, 109)
+            };
+            int index = randomNumber.Next(0, imageFilenames.Length);
+            backgroundImage = Image.FromFile(imageFilenames[index]);
+            landscapeColour = landscapeColours[index];
+
             InitializeComponent();
+
+            backgroundGraphics = InitialiseBuffer();
+            gameplayGraphics = InitialiseBuffer();
+            DrawBackground();
+            DrawGameplay();
+            NewTurn();
         }
 
         // From https://stackoverflow.com/questions/13999781/tearing-in-my-animation-on-winforms-c-sharp
@@ -45,29 +76,58 @@ namespace TankBattle
             }
         }
 
+        /// <summary>
+        /// This method is used to enable the control panel 
+        /// so the (human) controller can control their tank.
+        /// </summary>
         public void EnableHumanControl()
         {
-            throw new NotImplementedException();
+            controlPanel.Enabled = true;
         }
 
+        /// <summary>
+        /// This method alters the value of the UpDownNumeric used 
+        /// to control the angle, setting it to the provided value.
+        /// </summary>
+        /// <param name="angle"></param>
         public void SetAngle(float angle)
         {
-            throw new NotImplementedException();
+            numericUpDown_Power.Value = (decimal)angle;
+            currentGame.CurrentPlayerTank().SetAngle(angle);
         }
 
+        /// <summary>
+        /// This method alters the value of the TrackBar used 
+        /// to control the power level, setting it to the provided value.
+        /// </summary>
+        /// <param name="power"></param>
         public void SetForce(int power)
         {
-            throw new NotImplementedException();
-        }
-        public void SelectWeapon(int weapon)
-        {
-            throw new NotImplementedException();
+            trackBar_power.Value = power;
+            currentGame.CurrentPlayerTank().SetForce(power);
         }
 
+        /// <summary>
+        /// This method changes the selected item in the ComboBox, 
+        /// setting it to the provided value.
+        /// </summary>
+        /// <param name="weapon"></param>
+        public void SelectWeapon(int weapon)
+        {
+            int index = currentGame.CurrentPlayerTank().GetPlayerWeapon();
+            comboBox1.Text = currentGame.CurrentPlayerTank().GetTank().GetWeapons()[index];
+        }
+
+        /// <summary>
+        /// This method fired the weapon
+        /// </summary>
         public void Attack()
         {
-            throw new NotImplementedException();
+            currentGame.CurrentPlayerTank().Attack();
+            controlPanel.Enabled = false;
+            timer1.Enabled = true;
         }
+
 
         private void DrawBackground()
         {
@@ -107,6 +167,115 @@ namespace TankBattle
         {
             Graphics graphics = displayPanel.CreateGraphics();
             gameplayGraphics.Render(graphics);
+        }
+
+        /// <summary>
+        /// This newly-created method is used to draw the gameplay elements of the screen
+        /// </summary>
+        private void DrawGameplay()
+        {
+            backgroundGraphics.Render(gameplayGraphics.Graphics);
+            currentGame.DisplayPlayerTanks(gameplayGraphics.Graphics, displayPanel.Size);
+            currentGame.DrawWeaponEffects(gameplayGraphics.Graphics, displayPanel.Size);
+        }
+
+        /// <summary>
+        /// This newly-created method is used to update form elements to reflect who the current player is
+        /// </summary>
+        private void NewTurn()
+        {
+            PlayerTank currentPlayerTank =currentGame.CurrentPlayerTank();
+            TankController currentTankController= currentPlayerTank.GetPlayerNumber();
+            Text = "Tank Battle - Round "+currentGame.GetRoundNumber()+" of "+currentGame.GetMaxRounds();
+            controlPanel.BackColor = currentTankController.PlayerColour();
+            lb_player.Text = currentTankController.Identifier();
+            SetAngle(currentPlayerTank.GetPlayerAngle());
+            SetForce(currentPlayerTank.GetCurrentPower());
+
+            if (currentGame.GetWindSpeed() > 0)
+            {
+                lb_windSpeed.Text = currentGame.GetWindSpeed()+" E";
+            }
+            else if (currentGame.GetWindSpeed() < 0)
+            {
+                lb_windSpeed.Text = -1 * currentGame.GetWindSpeed() + " W";
+            }
+            else
+            {
+                lb_windSpeed.Text = "0";
+            }
+
+            comboBox1.Items.Clear();
+            TankType tank = currentPlayerTank.GetTank();
+            string[] weapons =tank.GetWeapons();
+            for(int i = 0; i < weapons.Length; i++)
+            {
+                comboBox1.Items.Add(weapons[i]);
+            }
+            SelectWeapon(currentPlayerTank.GetPlayerWeapon());
+            currentTankController.StartTurn(this, currentGame);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            controlPanel.Enabled = false;
+            Attack();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectWeapon(comboBox1.SelectedIndex);
+        }
+
+        private void numericUpDown_Power_ValueChanged(object sender, EventArgs e)
+        {
+            SetAngle((float)numericUpDown_Power.Value);
+            DrawGameplay();
+            displayPanel.Invalidate();
+        }
+
+        private void trackBar_power_ValueChanged(object sender, EventArgs e)
+        {
+            SetForce(trackBar_power.Value);
+            lb_power.Text = trackBar_power.Value.ToString();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            bool isEffected = currentGame.WeaponEffectTick();
+            if (!isEffected)
+            {
+                bool moved = currentGame.Gravity();
+                DrawBackground();
+                DrawGameplay();
+                displayPanel.Invalidate();
+                if (moved)
+                {
+                    return;
+                }
+                else
+                {
+                    timer1.Stop();
+                    bool isOver = currentGame.TurnOver();
+                    if (isOver)
+                    {
+                        NewTurn();
+                    }
+                    else
+                    {
+                        Dispose();
+                        currentGame.NextRound();
+                        return;
+                    }
+
+                }
+            }
+            else
+            {
+                DrawGameplay();
+                displayPanel.Invalidate();
+                return;
+            }
         }
     }
 }

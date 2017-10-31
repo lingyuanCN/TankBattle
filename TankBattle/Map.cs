@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace TankBattle
 {
+    /// <summary>
+    /// This class represents the landscape, the arena on which the tanks battle. 
+    /// The terrain is randomly generated and can be destroyed during the round. 
+    /// A new Map with a newly-generated terrain is created for each round.
+    /// </summary>
     public class Map
     {
         public const int WIDTH = 160;
@@ -13,6 +18,9 @@ namespace TankBattle
         private bool[,] battlefield;
         private static Random randomNumber = new Random();
 
+        /// <summary>
+        /// This constructor randomly generates the terrain on which the tanks will battle.
+        /// </summary>
         public Map()
         {
             battlefield = new bool[WIDTH, HEIGHT];
@@ -37,16 +45,25 @@ namespace TankBattle
                     }
                 }
             }
-
-            //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// This returns whether there is any terrain at the given coordinates.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns>If there is, it returns true. Otherwise, it returns false.</returns>
         public bool TerrainAt(int x, int y)
         {
             return battlefield[x, y];
-            throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// This returns whether there is room for a tank-sized object at the given coordinates.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public bool TankFits(int x, int y)
         {
             for(int i=0; i < TankType.WIDTH; i++)
@@ -60,10 +77,13 @@ namespace TankBattle
                 }
             }
             return false;
-
-            throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// This method takes the x coordinate of a tank and, using that, finds the largest (lowest) y coordinate where a tank can go.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         public int TankPlace(int x)
         {
             int y;
@@ -75,10 +95,14 @@ namespace TankBattle
                 }
             }
             return y - 1;
-
-            //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// This method destroys all terrain within a circle centred around destroyX, destroyY. 
+        /// </summary>
+        /// <param name="destroyX"></param>
+        /// <param name="destroyY"></param>
+        /// <param name="radius"></param>
         public void DestroyGround(float destroyX, float destroyY, float radius)
         {
             for(int y = 0; y < HEIGHT; y++)
@@ -91,10 +115,12 @@ namespace TankBattle
                     }
                 }
             }
-
-            //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// This method moves any loose terrain down one tile.
+        /// </summary>
+        /// <returns></returns>
         public bool Gravity()
         {
             bool isChanged = false;
@@ -111,8 +137,6 @@ namespace TankBattle
                 }
             }
             return isChanged;
-
-            //throw new NotImplementedException();
         }
     }
 }

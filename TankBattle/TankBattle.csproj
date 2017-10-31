@@ -64,7 +64,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AIPlayer.cs" />
+    <Compile Include="Leaderboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Leaderboard.Designer.cs">
+      <DependentUpon>Leaderboard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Map.cs" />
+    <Compile Include="SetupGame.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetupGame.Designer.cs">
+      <DependentUpon>SetupGame.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SetupPlayer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetupPlayer.Designer.cs">
+      <DependentUpon>SetupPlayer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shrapnel.cs" />
     <Compile Include="SkirmishForm.cs">
       <SubType>Form</SubType>
@@ -88,6 +106,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TankType.cs" />
     <Compile Include="Attack.cs" />
+    <EmbeddedResource Include="Leaderboard.resx">
+      <DependentUpon>Leaderboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SetupGame.resx">
+      <DependentUpon>SetupGame.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SetupPlayer.resx">
+      <DependentUpon>SetupPlayer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SkirmishForm.resx">
       <DependentUpon>SkirmishForm.cs</DependentUpon>
     </EmbeddedResource>

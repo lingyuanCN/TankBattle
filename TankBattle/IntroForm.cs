@@ -16,5 +16,11 @@ namespace TankBattle
         {
             InitializeComponent();
         }
+
+        private void newGameButton_Click(object sender, EventArgs e)
+        {
+            Form setupGame = new SetupGame();
+            setupGame.Show();
+        }
     }
 }

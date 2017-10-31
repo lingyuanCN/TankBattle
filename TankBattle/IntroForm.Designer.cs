@@ -58,6 +58,7 @@
             this.newGameButton.TabIndex = 1;
             this.newGameButton.Text = "Start New Game";
             this.newGameButton.UseVisualStyleBackColor = true;
+            this.newGameButton.Click += new System.EventHandler(this.newGameButton_Click);
             // 
             // label1
             // 
@@ -70,7 +71,7 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "n9841270";
             // 
-            // TitleForm
+            // IntroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -83,7 +84,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "TitleForm";
+            this.Name = "IntroForm";
             this.Text = "Tank Battle";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
